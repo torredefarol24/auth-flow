@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { currentTS } from '../../constants'
 import { User } from '../../models/User'
 import bcrypt from 'bcryptjs';
+import { JWTCL } from '../../bootstrap/jwt';
 
 export const userSignup = async (request: Request, response: Response) => {
 	var context: any = {
@@ -22,9 +23,6 @@ export const userSignup = async (request: Request, response: Response) => {
 
 	try {
 
-            // Implement Signup
-            // iii.     Create Token
-		
 		var cust = await User.findOne({ email: email }).select("_id");
 		if (cust !== null) {
 			context.message = `Email ${email} already Taken`;
@@ -43,12 +41,14 @@ export const userSignup = async (request: Request, response: Response) => {
 			},
 			token: 0
 		};
-
-		await User.create(user);
-
+		
+		const createdUser = await User.create(user);
+		var token = new JWTCL().createToken(createdUser._id)
+		await User.findOneAndUpdate({ _id: createdUser._id}, {token:token})
+		
 		context.success = true
 		context.data = {
-			token: "token"
+			token: token
 		}
 
 		return response.status(201).json(context)
