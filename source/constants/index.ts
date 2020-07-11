@@ -1,0 +1,1 @@
+export const currentTS = new Date().toISOString()
