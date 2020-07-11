@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
 import { bodyParserSetup, routeSetup } from "../bootstrap/setup";
+import { DBConnection } from '../bootstrap/db';
+
 
 var pathOpts = {
 	path: path.join(__dirname + "/../../", ".env")
@@ -25,6 +27,7 @@ export class AuthFlow {
 	}
 
 	public startServer() {
+		const mongoConnection = new DBConnection().connectToDB()
 		const listenPort = process.env.PORT
 		const listenCallback = () => {
 			console.log(`====================================`)
