@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { currentTS } from '../../constants'
+import { JWTCL } from '../../bootstrap/jwt'
+import { User } from '../../models/User'
 
 export const userLogout = async (request: Request, response: Response) => {
 	var context: any = {
@@ -9,9 +11,13 @@ export const userLogout = async (request: Request, response: Response) => {
 	}
 
 	try {
-      
-            // Implement Logout 
-            // i. Remove Token from User Row
+		const headerToken : any = 
+			request.headers && 
+			request.headers.authorization && 
+			request.headers.authorization.split(" ")[1]
+
+		const userId = new JWTCL().getUserIdFromToken(headerToken);
+		await User.findOneAndUpdate({ _id : userId}, {token : null})
 
 		context.success = true
 		return response.status(200).json(context)

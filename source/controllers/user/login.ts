@@ -38,6 +38,7 @@ export const userLogin = async (request: Request, response: Response) => {
 		}
 
 		var token = new JWTCL().createToken(foundUser._id)
+		await User.findOneAndUpdate({ _id: foundUser._id}, {token:token})
 
 		context.success = true
 		context.data = {

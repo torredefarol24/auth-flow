@@ -68,4 +68,16 @@ export class JWTCL {
 	// 	}
 	// }
 
+	public getUserIdFromToken = (token: string) => {
+		try {
+			var result : any = JWT.verify(token, this.TOKEN_SECRET)
+			return result.user_id
+		} catch (error) {
+			console.error(`JWT Manager : verifyToken => ${error}`)
+			if (error.name === 'TokenExpiredError') {
+				return 0
+			}
+		}
+	}
+
 }
