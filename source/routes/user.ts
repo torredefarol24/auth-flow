@@ -5,5 +5,5 @@ import { checkUserJWT } from "../middleware/check_jwt_user";
 export const userRouter: Router = Router();
 
 userRouter.post("/login", UserController.login);
-userRouter.post("/signup", UserController.logout);
-userRouter.post("/logout", checkUserJWT, UserController.signup);
+userRouter.post("/signup", UserController.signup);
+userRouter.post("/logout", checkUserJWT, UserController.logout);

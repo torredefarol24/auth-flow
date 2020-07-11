@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { currentTS } from '../../constants'
+import { User } from '../../models/User'
+import bcrypt from 'bcryptjs';
 
 export const userSignup = async (request: Request, response: Response) => {
 	var context: any = {
@@ -9,6 +11,7 @@ export const userSignup = async (request: Request, response: Response) => {
 	}
 
 	const missingKeys = !request.body.password || !request.body.email 
+	const { email, password, fullname } = request.body
 
 	if (missingKeys) {
 		var errMsg = "Keys missing in Request"
@@ -20,13 +23,31 @@ export const userSignup = async (request: Request, response: Response) => {
 	try {
 
             // Implement Signup
-            // i.       Find Existing User By Email
-            // ii.      Create User
             // iii.     Create Token
 		
+		var cust = await User.findOne({ email: email }).select("_id");
+		if (cust !== null) {
+			context.message = `Email ${email} already Taken`;
+			console.error(`\n----${currentTS}---- User::Signup Error => Email ${email} already Taken`)
+			return response.status(209).json(context);
+		}
+
+		var passHash = await bcrypt.hash(password, 10);
+		var user = {
+			email: email,
+			password: passHash,
+			fullname: fullname,
+			status: {
+				active: true,
+				archived: false
+			},
+			token: 0
+		};
+
+		await User.create(user);
+
 		context.success = true
 		context.data = {
-			user: "user",
 			token: "token"
 		}
 
