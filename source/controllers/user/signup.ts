@@ -23,8 +23,8 @@ export const userSignup = async (request: Request, response: Response) => {
 
 	try {
 
-		var cust = await User.findOne({ email: email }).select("_id");
-		if (cust !== null) {
+		var foundUser = await User.findOne({ email: email }).select("_id");
+		if (foundUser !== null) {
 			context.message = `Email ${email} already Taken`;
 			console.error(`\n----${currentTS}---- User::Signup Error => Email ${email} already Taken`)
 			return response.status(209).json(context);

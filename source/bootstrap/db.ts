@@ -1,10 +1,6 @@
 import mongoose from 'mongoose';
-import path from 'path';
-
-var pathOpts = {
-	path: path.join(__dirname + "/../../", ".env")
-};
-require("dotenv").config(pathOpts);
+import { ENV_SETUP } from './env_setup'
+ENV_SETUP()
 
 export class DBConnection {
 

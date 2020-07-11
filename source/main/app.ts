@@ -1,40 +1,16 @@
 import express from "express";
-import path from "path";
-import { bodyParserSetup, routeSetup } from "../bootstrap/setup";
-import { DBConnection } from '../bootstrap/db';
+import { initApp } from "../bootstrap/setup";
 
-
-var pathOpts = {
-	path: path.join(__dirname + "/../../", ".env")
-};
-require("dotenv").config(pathOpts);
-
-export class AuthFlow {
+export class AuthFlowApi {
 	private app: express.Application;
 
 	constructor() {
 		this.app = express();
-		this.setupBodyParser(this.app);
-		this.setupAppRoutes(this.app);
+		this.initializeApp(this.app);
 	}
 
-	private setupAppRoutes(app: any) {
-		routeSetup(app);
+	private initializeApp(app: any) {
+		initApp(app);
 	}
 
-	private setupBodyParser(app: any) {
-		bodyParserSetup(app);
-	}
-
-	public startServer() {
-		const mongoConnection = new DBConnection().connectToDB()
-		const listenPort = process.env.PORT
-		const listenCallback = () => {
-			console.log(`====================================`)
-			console.log(`AuthFlow App started on: \n${new Date()}`)
-			console.log(`====================================`)
-		}
-
-		this.app.listen(listenPort, listenCallback)
-	}
 }
