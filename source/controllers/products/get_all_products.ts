@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { currentTS } from '../../constants'
 
-export const getAllProducts = async (request: Request, response: Response) => {
+export const getAllProducts = (request: Request, response: Response) => {
 	var context: any = {
 		success: false,
 		message: "Products Fetching Successful",

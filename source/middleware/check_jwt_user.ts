@@ -35,4 +35,5 @@ export const checkUserJWT = async (request: Request, response: Response, next: N
 		return response.status(401).json(context)
 	}
 
+	next()
 }
